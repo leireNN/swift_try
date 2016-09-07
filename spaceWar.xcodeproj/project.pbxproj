@@ -16,6 +16,14 @@
 		246D3C8C1D801C64002FFC66 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 246D3C8A1D801C64002FFC66 /* LaunchScreen.storyboard */; };
 		246D3C971D801C64002FFC66 /* spaceWarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3C961D801C64002FFC66 /* spaceWarTests.swift */; };
 		246D3CA21D801C64002FFC66 /* spaceWarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CA11D801C64002FFC66 /* spaceWarUITests.swift */; };
+		246D3CB01D801F6D002FFC66 /* StartGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CAF1D801F6D002FFC66 /* StartGameScene.swift */; };
+		246D3CB21D80210D002FFC66 /* newgamebtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 246D3CB11D80210D002FFC66 /* newgamebtn.png */; };
+		246D3CB41D8026E3002FFC66 /* Invader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CB31D8026E3002FFC66 /* Invader.swift */; };
+		246D3CB61D80373A002FFC66 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CB51D80373A002FFC66 /* Player.swift */; };
+		246D3CB81D804AE3002FFC66 /* Bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CB71D804AE3002FFC66 /* Bullet.swift */; };
+		246D3CBA1D804C29002FFC66 /* InvaderBullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CB91D804C29002FFC66 /* InvaderBullet.swift */; };
+		246D3CBC1D804D47002FFC66 /* PlayerBullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CBB1D804D47002FFC66 /* PlayerBullet.swift */; };
+		246D3CBE1D80551D002FFC66 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3CBD1D80551D002FFC66 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +59,14 @@
 		246D3C9D1D801C64002FFC66 /* spaceWarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = spaceWarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		246D3CA11D801C64002FFC66 /* spaceWarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spaceWarUITests.swift; sourceTree = "<group>"; };
 		246D3CA31D801C64002FFC66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		246D3CAF1D801F6D002FFC66 /* StartGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartGameScene.swift; sourceTree = "<group>"; };
+		246D3CB11D80210D002FFC66 /* newgamebtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newgamebtn.png; sourceTree = "<group>"; };
+		246D3CB31D8026E3002FFC66 /* Invader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Invader.swift; sourceTree = "<group>"; };
+		246D3CB51D80373A002FFC66 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		246D3CB71D804AE3002FFC66 /* Bullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bullet.swift; sourceTree = "<group>"; };
+		246D3CB91D804C29002FFC66 /* InvaderBullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvaderBullet.swift; sourceTree = "<group>"; };
+		246D3CBB1D804D47002FFC66 /* PlayerBullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerBullet.swift; sourceTree = "<group>"; };
+		246D3CBD1D80551D002FFC66 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +97,7 @@
 		246D3C711D801C64002FFC66 = {
 			isa = PBXGroup;
 			children = (
+				246D3CBB1D804D47002FFC66 /* PlayerBullet.swift */,
 				246D3C7C1D801C64002FFC66 /* spaceWar */,
 				246D3C951D801C64002FFC66 /* spaceWarTests */,
 				246D3CA01D801C64002FFC66 /* spaceWarUITests */,
@@ -104,9 +121,16 @@
 				246D3C7D1D801C64002FFC66 /* AppDelegate.swift */,
 				246D3C7F1D801C64002FFC66 /* GameScene.sks */,
 				246D3C811D801C64002FFC66 /* GameScene.swift */,
+				246D3CBD1D80551D002FFC66 /* Utilities.swift */,
 				246D3C831D801C64002FFC66 /* GameViewController.swift */,
+				246D3CB71D804AE3002FFC66 /* Bullet.swift */,
+				246D3CB91D804C29002FFC66 /* InvaderBullet.swift */,
+				246D3CAF1D801F6D002FFC66 /* StartGameScene.swift */,
+				246D3CB51D80373A002FFC66 /* Player.swift */,
 				246D3C851D801C64002FFC66 /* Main.storyboard */,
+				246D3CB11D80210D002FFC66 /* newgamebtn.png */,
 				246D3C881D801C64002FFC66 /* Assets.xcassets */,
+				246D3CB31D8026E3002FFC66 /* Invader.swift */,
 				246D3C8A1D801C64002FFC66 /* LaunchScreen.storyboard */,
 				246D3C8D1D801C64002FFC66 /* Info.plist */,
 			);
@@ -238,6 +262,7 @@
 				246D3C801D801C64002FFC66 /* GameScene.sks in Resources */,
 				246D3C8C1D801C64002FFC66 /* LaunchScreen.storyboard in Resources */,
 				246D3C891D801C64002FFC66 /* Assets.xcassets in Resources */,
+				246D3CB21D80210D002FFC66 /* newgamebtn.png in Resources */,
 				246D3C871D801C64002FFC66 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,9 +288,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				246D3CBC1D804D47002FFC66 /* PlayerBullet.swift in Sources */,
 				246D3C821D801C64002FFC66 /* GameScene.swift in Sources */,
+				246D3CB01D801F6D002FFC66 /* StartGameScene.swift in Sources */,
+				246D3CB41D8026E3002FFC66 /* Invader.swift in Sources */,
+				246D3CB81D804AE3002FFC66 /* Bullet.swift in Sources */,
 				246D3C841D801C64002FFC66 /* GameViewController.swift in Sources */,
+				246D3CB61D80373A002FFC66 /* Player.swift in Sources */,
 				246D3C7E1D801C64002FFC66 /* AppDelegate.swift in Sources */,
+				246D3CBE1D80551D002FFC66 /* Utilities.swift in Sources */,
+				246D3CBA1D804C29002FFC66 /* InvaderBullet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
