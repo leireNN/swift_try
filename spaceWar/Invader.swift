@@ -15,9 +15,16 @@ class Invader: SKSpriteNode {
     var invaderColumn = 0
     
     init(){
-        let texture = SKTexture(imageNamed: "kirby")
-        super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width/6, height: texture.size().height/6))
+        let texture = SKTexture(imageNamed: "invader2")
+        super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width, height: texture.size().height))
         self.name = "invader"
+        
+        self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
+        self.physicsBody?.dynamic = true
+        self.physicsBody?.usesPreciseCollisionDetection = false
+        self.physicsBody?.categoryBitMask = CollisionCategories.Invader
+        self.physicsBody?.contactTestBitMask = CollisionCategories.PlayerBullet | CollisionCategories.Player
+        self.physicsBody?.collisionBitMask = 0x0
     }
     
     required init?(coder aDecoder: NSCoder){
