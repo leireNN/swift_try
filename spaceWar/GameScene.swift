@@ -31,8 +31,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
+    var backgroundColorCustom = UIColor.orangeColor()
+    
     
     override func didMoveToView(view: SKView) {
+        self.backgroundColor = backgroundColorCustom
+        
+        
+        //Fire button
+        let fireButton = SKSpriteNode(imageNamed: "maki.png")
+        fireButton.position = CGPointMake(size.width-100,100)
+        fireButton.name = "fireButton"
+        fireButton.setScale(0.25)
+        addChild(fireButton)
+        
+        
     
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
@@ -58,7 +71,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         swipeDown.direction = .Down
         view.addGestureRecognizer(swipeDown)
         
-        backgroundColor = SKColor.blackColor()
+        backgroundColor = UIColorFromRGB(0xEECC91)
+        
         rigthBounds = self.size.width-30
         NSLog("We have loaded the start screen")
         setupInvaders()
@@ -66,6 +80,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         invokeInvaderFire()
         setupAccelerometer()
     }
+    
+    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    
     
     func setupInvaders(){
         var invaderRow = 0
@@ -146,7 +171,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        player.fireBullet(self, accelerationX: accelerationX, accelerationY: accelerationY)
+        let touch = touches.first! as UITouch
+        let touchLocation = touch.locationInNode(self)
+        let touchedNode = self.nodeAtPoint(touchLocation)
+        
+        if(touchedNode.name == "fireButton"){
+            player.fireBullet(self, accelerationX: accelerationX, accelerationY: accelerationY)
+        }
+
+        
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
@@ -171,7 +204,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let theInvader = firstBody.node as! Invader
             let newInvaderRow = theInvader.invaderRow - 1
             let newInvaderColumn = theInvader.invaderColumn
-            if(newInvaderRow >= 1){
+            if(newInvaderRow >= 0){
                 self.enumerateChildNodesWithName("invader"){node, stop in
                     let invader = node as!Invader
                     if invader.invaderRow == newInvaderRow && invader.invaderColumn == newInvaderColumn{

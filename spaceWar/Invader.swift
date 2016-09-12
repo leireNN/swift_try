@@ -15,8 +15,8 @@ class Invader: SKSpriteNode {
     var invaderColumn = 0
     
     init(){
-        let texture = SKTexture(imageNamed: "invader2")
-        super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width, height: texture.size().height))
+        let texture = SKTexture(imageNamed: "salad")
+        super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width/4, height: texture.size().height/4))
         self.name = "invader"
         
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
@@ -32,7 +32,8 @@ class Invader: SKSpriteNode {
     }
     
     func fireBullet(scene: SKScene){
-        let bullet = InvaderBullet(imageName: "taser", bulletSound: nil)
+        let bullet = InvaderBullet(imageName: "salad", bulletSound: nil)
+        bullet.setScale(0.25)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y-self.size.height/2
         scene.addChild(bullet)

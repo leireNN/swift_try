@@ -26,7 +26,7 @@ class Player: SKSpriteNode {
     }
     
     init(){
-        let texture = SKTexture(imageNamed: "spaceship")
+        let texture = SKTexture(imageNamed: "sumo")
         super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width/4, height: texture.size().height/4))
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
         self.physicsBody?.dynamic = true
@@ -36,7 +36,8 @@ class Player: SKSpriteNode {
         self.physicsBody?.collisionBitMask = CollisionCategories.EdgeBody
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.collisionBitMask = 0x0
-        animate()
+        self.setScale(4)
+        //animate()
         
     }
     
@@ -47,7 +48,7 @@ class Player: SKSpriteNode {
     private func animate(){
         var playerTextures:[SKTexture] = []
         for i in 1...2{
-            playerTextures.append(SKTexture(imageNamed: "player\(i)"))
+            playerTextures.append(SKTexture(imageNamed: "sumo"))
         }
         let playerAnimation = SKAction.repeatActionForever(SKAction.animateWithTextures(playerTextures, timePerFrame: 0.1))
         self.runAction(playerAnimation)
@@ -104,9 +105,12 @@ class Player: SKSpriteNode {
             return
         }else{
             canFire = false
-            let bullet = PlayerBullet(imageName: "taser", bulletSound: nil)
+            let bullet = PlayerBullet(imageName: "maki.png", bulletSound: nil)
+            bullet.setScale(0.25)
             bullet.position.x = self.position.x
-            bullet.position.y = self.position.y+self.size.height/2
+            bullet.position.y = self.position.y
+            let rotate = SKAction.rotateByAngle(self.zRotation, duration: 0.01)
+            bullet.runAction(rotate)
             scene.addChild(bullet)
             //let moveBulletAction = SKAction.moveTo(CGPoint(x: self.position.x, y: scene.size.height+bullet.size.height), duration: 1.0)
             let moveActionVector = SKAction.moveBy(CGVector(dx: cos((self.zRotation + (90.0 * 3.14/180.0))) * 5400, dy: sin((self.zRotation) + (90.0 * 3.14/180.0)) * 5400), duration: 3)
