@@ -30,6 +30,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let maxLevels = 3
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
+    var accelerationY: CGFloat = 0.0
     
     override func didMoveToView(view: SKView) {
     
@@ -37,6 +38,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
         self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
+        
+        let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedRight(_:)))
+        swipeRight.direction = .Right
+        view.addGestureRecognizer(swipeRight)
+        
+        
+        let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedLeft(_:)))
+        swipeLeft.direction = .Left
+        view.addGestureRecognizer(swipeLeft)
+        
+        
+        let swipeUp:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedUp(_:)))
+        swipeUp.direction = .Up
+        view.addGestureRecognizer(swipeUp)
+        
+        
+        let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedDown(_:)))
+        swipeDown.direction = .Down
+        view.addGestureRecognizer(swipeDown)
         
         backgroundColor = SKColor.blackColor()
         rigthBounds = self.size.width-30
@@ -126,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        player.fireBullet(self)
+        player.fireBullet(self, accelerationX: accelerationX, accelerationY: accelerationY)
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
@@ -210,11 +230,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!) { (accelerometerData, error) in
             let acceleration = accelerometerData?.acceleration
             self.accelerationX = CGFloat(acceleration!.x)
+            self.accelerationY = CGFloat(acceleration!.y)
         }
     }
     
     override func didSimulatePhysics() {
-        player.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: 0)
+        player.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+        
     }
+    
+    func swipedRight(sender:UISwipeGestureRecognizer){
+        print("swiped right")
+        player.rotateRight()
+        
+    }
+    
+    func swipedLeft(sender:UISwipeGestureRecognizer){
+        print("swiped left")
+        player.rotateLeft()
+    }
+    
+    func swipedUp(sender:UISwipeGestureRecognizer){
+        print("swiped up")
+    }
+    
+    func swipedDown(sender:UISwipeGestureRecognizer){
+        print("swiped down")
+    }
+    
     
 }

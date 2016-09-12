@@ -13,6 +13,8 @@ class Player: SKSpriteNode {
     
     private var canFire = true
     private var invincible = false
+    private var angle = CGFloat(70)
+    
     private var lives:Int = 3 {
         didSet {
             if(lives < 0){
@@ -78,7 +80,26 @@ class Player: SKSpriteNode {
 
     }
     
-    func fireBullet(scene:SKScene){
+    func rotateRight(){
+        let angle : CGFloat = -CGFloat(M_PI_4)
+        let rotate = SKAction.rotateByAngle(angle, duration: 0.25)
+        runAction(rotate, withKey: "rotate")
+        print("Rotation: \( self.zRotation)")
+        self.angle += angle
+        print("Angle: \( self.angle)")
+    }
+    
+    func rotateLeft(){
+        let angle : CGFloat = CGFloat(M_PI_4)
+        let rotate = SKAction.rotateByAngle(angle, duration: 0.25)
+        runAction(rotate, withKey: "rotate")
+        print("Rotation: \( self.zRotation)")
+        self.angle += angle
+        print("Angle: \( self.angle)")
+
+    }
+    
+    func fireBullet(scene:SKScene, accelerationX: CGFloat, accelerationY: CGFloat){
         if(!canFire){
             return
         }else{
@@ -87,9 +108,11 @@ class Player: SKSpriteNode {
             bullet.position.x = self.position.x
             bullet.position.y = self.position.y+self.size.height/2
             scene.addChild(bullet)
-            let moveBulletAction = SKAction.moveTo(CGPoint(x: self.position.x, y: scene.size.height+bullet.size.height), duration: 1.0)
+            //let moveBulletAction = SKAction.moveTo(CGPoint(x: self.position.x, y: scene.size.height+bullet.size.height), duration: 1.0)
+            let moveActionVector = SKAction.moveBy(CGVector(dx: cos((self.zRotation + (90.0 * 3.14/180.0))) * 5400, dy: sin((self.zRotation) + (90.0 * 3.14/180.0)) * 5400), duration: 3)
+            
             let removeBulletAction = SKAction.removeFromParent()
-            bullet.runAction(SKAction.sequence([moveBulletAction, removeBulletAction]))
+            bullet.runAction(SKAction.sequence([moveActionVector, removeBulletAction]))
             let waitToEnableFire = SKAction.waitForDuration(0.5)
             runAction(waitToEnableFire, completion: {
                 self.canFire = true
