@@ -26,6 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let leftBounds = CGFloat(30)
     var rigthBounds = CGFloat(0)
     var invadersWhoCanFire:[Invader] = [Invader]()
+    var invadersWhoCanFly: [Invader] = [Invader]()
     let player:Player = Player()
     let maxLevels = 3
     let motionManager: CMMotionManager = CMMotionManager()
@@ -71,7 +72,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         swipeDown.direction = .Down
         view.addGestureRecognizer(swipeDown)
         
-        backgroundColor = UIColorFromRGB(0xEECC91)
+        var utilsGame = UtilsGame()
+        backgroundColor = utilsGame.UIColorFromRGB(0xEECC91)
         
         rigthBounds = self.size.width-30
         NSLog("We have loaded the start screen")
@@ -81,14 +83,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupAccelerometer()
     }
     
-    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
     
     
     
