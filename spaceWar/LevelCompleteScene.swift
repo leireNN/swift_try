@@ -11,22 +11,22 @@ import SpriteKit
 
 class LevelCompleteScene: SKScene {
     
-    override func didMoveToView(view:SKView) {
-        self.backgroundColor = SKColor.blackColor()
+    override func didMove(to view:SKView) {
+        self.backgroundColor = SKColor.black
         let startGameButton = SKSpriteNode(imageNamed: "nextlevelbtn.png")
-        startGameButton.position = CGPointMake(size.width/2, size.height/2-100)
+        startGameButton.position = CGPoint(x: size.width/2, y: size.height/2-100)
         startGameButton.name = "nextlevel"
         addChild(startGameButton)
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first! as UITouch
-        let touchLocation = touch.locationInNode(self)
-        let touchedNode = self.nodeAtPoint(touchLocation)
+        let touchLocation = touch.location(in: self)
+        let touchedNode = self.atPoint(touchLocation)
         if(touchedNode.name == "nextlevel"){
             let gameOverScene = GameScene(size: size)
             gameOverScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
+            let transitionType = SKTransition.flipHorizontal(withDuration: 0.5)
             view?.presentScene(gameOverScene, transition: transitionType)
         }
     }

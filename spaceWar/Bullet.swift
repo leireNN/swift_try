@@ -13,9 +13,9 @@ class Bullet: SKSpriteNode {
     
     init(imageName: String, bulletSound: String?){
         let texture = SKTexture(imageNamed: imageName)
-        super.init(texture: texture, color: SKColor.clearColor(), size: texture.size())
+        super.init(texture: texture, color: SKColor.clear, size: texture.size())
         if(bulletSound != nil){
-            runAction(SKAction.playSoundFileNamed(bulletSound!, waitForCompletion: false))
+            run(SKAction.playSoundFileNamed(bulletSound!, waitForCompletion: false))
         }
     }
     

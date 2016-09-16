@@ -13,14 +13,15 @@ class Invader: SKSpriteNode {
 
     var invaderRow = 0
     var invaderColumn = 0
+    var value = 1
     
     init(){
         let texture = SKTexture(imageNamed: "salad")
-        super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width/4, height: texture.size().height/4))
+        super.init(texture: texture, color: SKColor.clear, size: CGSize(width: texture.size().width/4, height: texture.size().height/4))
         self.name = "invader"
         
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
-        self.physicsBody?.dynamic = true
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.usesPreciseCollisionDetection = false
         self.physicsBody?.categoryBitMask = CollisionCategories.Invader
         self.physicsBody?.contactTestBitMask = CollisionCategories.PlayerBullet | CollisionCategories.Player
@@ -31,14 +32,14 @@ class Invader: SKSpriteNode {
         super.init(coder:aDecoder)
     }
     
-    func fireBullet(scene: SKScene){
+    func fireBullet(_ scene: SKScene){
         let bullet = InvaderBullet(imageName: "salad", bulletSound: nil)
         bullet.setScale(0.25)
         bullet.position.x = self.position.x
         bullet.position.y = self.position.y-self.size.height/2
         scene.addChild(bullet)
-        let moveBulletAction = SKAction.moveTo(CGPoint(x: self.position.x, y: 0-bullet.size.height) , duration: 2.0)
+        let moveBulletAction = SKAction.move(to: CGPoint(x: self.position.x, y: 0-bullet.size.height) , duration: 2.0)
         let removeBulletAction = SKAction.removeFromParent()
-        bullet.runAction(SKAction.sequence([moveBulletAction, removeBulletAction]))
+        bullet.run(SKAction.sequence([moveBulletAction, removeBulletAction]))
     }
 }

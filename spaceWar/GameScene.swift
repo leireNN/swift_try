@@ -10,6 +10,7 @@ import SpriteKit
 import CoreMotion
 
 var invaderNum = 1
+var scorePlayer = 0
 
 struct CollisionCategories{
     static let Invader : UInt32 = 0x1 << 0
@@ -32,47 +33,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
-    var backgroundColorCustom = UIColor.orangeColor()
+    var backgroundColorCustom = UIColor.orange
+    var scoreText = SKLabelNode()
     
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         self.backgroundColor = backgroundColorCustom
         
         
         //Fire button
         let fireButton = SKSpriteNode(imageNamed: "maki.png")
-        fireButton.position = CGPointMake(size.width-100,100)
+        fireButton.position = CGPoint(x: size.width-100,y: 100)
         fireButton.name = "fireButton"
         fireButton.setScale(0.25)
         addChild(fireButton)
         
+        //Score label and text
+        let scoreLabel = SKLabelNode(text: "Score:")
+        scoreLabel.position = CGPoint(x: 100, y: size.height)
+        addChild(scoreLabel)
+        
+        scoreText.text = String(scorePlayer)
+        scoreText.position  = CGPoint(x: 200, y: size.height)
+        addChild(scoreText)
+        
+        
         
     
-        self.physicsWorld.gravity = CGVectorMake(0, 0)
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
-        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
         
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedRight(_:)))
-        swipeRight.direction = .Right
+        swipeRight.direction = .right
         view.addGestureRecognizer(swipeRight)
         
         
         let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedLeft(_:)))
-        swipeLeft.direction = .Left
+        swipeLeft.direction = .left
         view.addGestureRecognizer(swipeLeft)
         
         
         let swipeUp:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedUp(_:)))
-        swipeUp.direction = .Up
+        swipeUp.direction = .up
         view.addGestureRecognizer(swipeUp)
         
         
         let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.swipedDown(_:)))
-        swipeDown.direction = .Down
+        swipeDown.direction = .down
         view.addGestureRecognizer(swipeDown)
         
-        var utilsGame = UtilsGame()
+        let utilsGame = UtilsGame()
         backgroundColor = utilsGame.UIColorFromRGB(0xEECC91)
         
         rigthBounds = self.size.width-30
@@ -91,9 +103,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var invaderColumn = 0
         let numberOfInvaders = invaderNum*2+1
         
-        for var i = 1; i <= rowsOfInvaders; i += 1 {
+        for i in 0..<rowsOfInvaders+1 {
             invaderRow = i
-            for var j = 1; j <= numberOfInvaders; j += 1 {
+            for j in 0..<numberOfInvaders+1 {
                 invaderColumn = j
                 let tempInvader:Invader = Invader()
                 let invaderHalfWidth:CGFloat = tempInvader.size.width/2
@@ -106,19 +118,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if(i == rowsOfInvaders){
                     invadersWhoCanFire.append(tempInvader)
                 }
-                
             }
         }
     }
     
     func setupPlayer(){
-        player.position = CGPoint(x: CGRectGetMidX(self.frame), y: player.size.height/2+10)
+        player.position = CGPoint(x: self.frame.midX, y: player.size.height/2+10)
         addChild(player)
     }
     
     func moveInvaders(){
         var changeDirection = false
-        enumerateChildNodesWithName("invader"){ node, stop in
+        enumerateChildNodes(withName: "invader"){ node, stop in
             
             let invader = node as! SKSpriteNode
             let invaderHalfWidth = invader.size.width/2
@@ -130,7 +141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if(changeDirection == true){
                 self.invaderSpeed *= -1
-                self.enumerateChildNodesWithName("invader") { node, stop in
+                self.enumerateChildNodes(withName: "invader") { node, stop in
                     let invader = node as! SKSpriteNode
                     invader.position.y -= CGFloat(46)
                 }
@@ -139,18 +150,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         moveInvaders()
     }
     
     func invokeInvaderFire(){
-        let fireBullet = SKAction.runBlock(){
+        let fireBullet = SKAction.run(){
             self.fireInvaderBullet()
         }
-        let waitToFireInvaderBullet = SKAction.waitForDuration(1.5)
+        let waitToFireInvaderBullet = SKAction.wait(forDuration: 1.5)
         let invaderFire = SKAction.sequence([fireBullet, waitToFireInvaderBullet])
-        let repeatForeverAction = SKAction.repeatActionForever(invaderFire)
-        runAction(repeatForeverAction)
+        let repeatForeverAction = SKAction.repeatForever(invaderFire)
+        run(repeatForeverAction)
     }
     
     func fireInvaderBullet(){
@@ -164,10 +175,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first! as UITouch
-        let touchLocation = touch.locationInNode(self)
-        let touchedNode = self.nodeAtPoint(touchLocation)
+        let touchLocation = touch.location(in: self)
+        let touchedNode = self.atPoint(touchLocation)
         
         if(touchedNode.name == "fireButton"){
             player.fireBullet(self, accelerationX: accelerationX, accelerationY: accelerationY)
@@ -176,7 +187,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
+        
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
         
@@ -194,21 +206,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 return
             }
             
-            let invadersPerRow = invaderNum*2+1
+            var invadersPerRow = invaderNum*2+1
             let theInvader = firstBody.node as! Invader
             let newInvaderRow = theInvader.invaderRow - 1
             let newInvaderColumn = theInvader.invaderColumn
             if(newInvaderRow >= 0){
-                self.enumerateChildNodesWithName("invader"){node, stop in
+                self.enumerateChildNodes(withName: "invader"){node, stop in
                     let invader = node as!Invader
+                    scorePlayer += invader.value
+                    self.scoreText.text = String(scorePlayer)
+                    
                     if invader.invaderRow == newInvaderRow && invader.invaderColumn == newInvaderColumn{
                         self.invadersWhoCanFire.append(invader)
-                        stop.memory = true
+                        stop.pointee = true
                     }
                 }
-                let invaderIndex = findIndex(invadersWhoCanFire, valueToFind:firstBody.node as! Invader)
+                let invaderIndex = findIndex(array: invadersWhoCanFire, valueToFind:firstBody.node as! Invader)
                 if(invaderIndex != nil){
-                    invadersWhoCanFire.removeAtIndex(invaderIndex!)
+                    invadersWhoCanFire.remove(at: invaderIndex!)
                 }
                 theInvader.removeFromParent()
                 secondBody.node?.removeFromParent()
@@ -225,7 +240,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func findIndex<T: Equatable>(array: [T], valueToFind: T) -> Int? {
-        for (index, value) in EnumerateSequence(array) {
+        for (index, value) in array.enumerated() {
             if value == valueToFind {
                 return index
             }
@@ -237,7 +252,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if(invaderNum <= maxLevels){
             let levelCompleteScene = LevelCompleteScene(size: size)
             levelCompleteScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
+            let transitionType = SKTransition.flipHorizontal(withDuration: 0.5)
             view?.presentScene(levelCompleteScene, transition: transitionType)
         }else{
             invaderNum = 1
@@ -248,13 +263,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func newGame(){
         let gameOverScene = StartGameScene(size:size)
         gameOverScene.scaleMode = scaleMode
-        let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
+        let transitionType = SKTransition.flipHorizontal(withDuration: 0.5)
         view?.presentScene(gameOverScene, transition: transitionType)
     }
     
     func setupAccelerometer(){
         motionManager.accelerometerUpdateInterval = 0.2
-        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!) { (accelerometerData, error) in
+        motionManager.startAccelerometerUpdates(to: OperationQueue.current!) { (accelerometerData, error) in
             let acceleration = accelerometerData?.acceleration
             self.accelerationX = CGFloat(acceleration!.x)
             self.accelerationY = CGFloat(acceleration!.y)
@@ -266,22 +281,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func swipedRight(sender:UISwipeGestureRecognizer){
+    func swipedRight(_ sender:UISwipeGestureRecognizer){
         print("swiped right")
         player.rotateRight()
         
     }
     
-    func swipedLeft(sender:UISwipeGestureRecognizer){
+    func swipedLeft(_ sender:UISwipeGestureRecognizer){
         print("swiped left")
         player.rotateLeft()
     }
     
-    func swipedUp(sender:UISwipeGestureRecognizer){
+    func swipedUp(_ sender:UISwipeGestureRecognizer){
         print("swiped up")
     }
     
-    func swipedDown(sender:UISwipeGestureRecognizer){
+    func swipedDown(_ sender:UISwipeGestureRecognizer){
         print("swiped down")
     }
     

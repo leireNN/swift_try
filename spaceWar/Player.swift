@@ -11,11 +11,11 @@ import SpriteKit
 
 class Player: SKSpriteNode {
     
-    private var canFire = true
-    private var invincible = false
-    private var angle = CGFloat(70)
+    fileprivate var canFire = true
+    fileprivate var invincible = false
+    fileprivate var angle = CGFloat(70)
     
-    private var lives:Int = 3 {
+    fileprivate var lives:Int = 3 {
         didSet {
             if(lives < 0){
                 kill()
@@ -27,9 +27,9 @@ class Player: SKSpriteNode {
     
     init(){
         let texture = SKTexture(imageNamed: "sumo")
-        super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: texture.size().width/4, height: texture.size().height/4))
+        super.init(texture: texture, color: SKColor.clear, size: CGSize(width: texture.size().width/4, height: texture.size().height/4))
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
-        self.physicsBody?.dynamic = true
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.usesPreciseCollisionDetection = false
         self.physicsBody?.categoryBitMask = CollisionCategories.Player
         self.physicsBody?.contactTestBitMask = CollisionCategories.InvaderBullet | CollisionCategories.Invader
@@ -44,13 +44,13 @@ class Player: SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
-    private func animate(){
+    fileprivate func animate(){
         var playerTextures:[SKTexture] = []
         for i in 1...2{
             playerTextures.append(SKTexture(imageNamed: "sumo"))
         }
-        let playerAnimation = SKAction.repeatActionForever(SKAction.animateWithTextures(playerTextures, timePerFrame: 0.1))
-        self.runAction(playerAnimation)
+        let playerAnimation = SKAction.repeatForever(SKAction.animate(with: playerTextures, timePerFrame: 0.1))
+        self.run(playerAnimation)
     }
     
     func die(){
@@ -63,27 +63,27 @@ class Player: SKSpriteNode {
         invaderNum = 1
         let gameOverScene = StartGameScene(size: self.scene!.size)
         gameOverScene.scaleMode = self.scene!.scaleMode
-        let transitionType = SKTransition.flipHorizontalWithDuration(0.5)
+        let transitionType = SKTransition.flipHorizontal(withDuration: 0.5)
         self.scene!.view!.presentScene(gameOverScene, transition: transitionType)
     }
     
     func respawn(){
         invincible = true
-        let fadeOutAction = SKAction.fadeOutWithDuration(0.4)
-        let fadeInAction = SKAction.fadeInWithDuration(0.4)
+        let fadeOutAction = SKAction.fadeOut(withDuration: 0.4)
+        let fadeInAction = SKAction.fadeIn(withDuration: 0.4)
         let fadeOutIn = SKAction.sequence([fadeOutAction, fadeInAction])
-        let fadeOutInAction = SKAction.repeatAction(fadeOutIn, count: 5)
-        let setInvincibleFalse = SKAction.runBlock(){
+        let fadeOutInAction = SKAction.repeat(fadeOutIn, count: 5)
+        let setInvincibleFalse = SKAction.run(){
             self.invincible = false
         }
-        runAction(SKAction.sequence([fadeOutInAction, setInvincibleFalse]))
+        run(SKAction.sequence([fadeOutInAction, setInvincibleFalse]))
 
     }
     
     func rotateRight(){
         let angle : CGFloat = -CGFloat(M_PI_4)
-        let rotate = SKAction.rotateByAngle(angle, duration: 0.25)
-        runAction(rotate, withKey: "rotate")
+        let rotate = SKAction.rotate(byAngle: angle, duration: 0.25)
+        run(rotate, withKey: "rotate")
         print("Rotation: \( self.zRotation)")
         self.angle += angle
         print("Angle: \( self.angle)")
@@ -91,15 +91,15 @@ class Player: SKSpriteNode {
     
     func rotateLeft(){
         let angle : CGFloat = CGFloat(M_PI_4)
-        let rotate = SKAction.rotateByAngle(angle, duration: 0.25)
-        runAction(rotate, withKey: "rotate")
+        let rotate = SKAction.rotate(byAngle: angle, duration: 0.25)
+        run(rotate, withKey: "rotate")
         print("Rotation: \( self.zRotation)")
         self.angle += angle
         print("Angle: \( self.angle)")
 
     }
     
-    func fireBullet(scene:SKScene, accelerationX: CGFloat, accelerationY: CGFloat){
+    func fireBullet(_ scene:SKScene, accelerationX: CGFloat, accelerationY: CGFloat){
         if(!canFire){
             return
         }else{
@@ -108,16 +108,16 @@ class Player: SKSpriteNode {
             bullet.setScale(0.25)
             bullet.position.x = self.position.x
             bullet.position.y = self.position.y
-            let rotate = SKAction.rotateByAngle(self.zRotation, duration: 0.01)
-            bullet.runAction(rotate)
+            let rotate = SKAction.rotate(byAngle: self.zRotation, duration: 0.01)
+            bullet.run(rotate)
             scene.addChild(bullet)
             //let moveBulletAction = SKAction.moveTo(CGPoint(x: self.position.x, y: scene.size.height+bullet.size.height), duration: 1.0)
-            let moveActionVector = SKAction.moveBy(CGVector(dx: cos((self.zRotation + (90.0 * 3.14/180.0))) * 5400, dy: sin((self.zRotation) + (90.0 * 3.14/180.0)) * 5400), duration: 3)
+            let moveActionVector = SKAction.move(by: CGVector(dx: cos((self.zRotation + (90.0 * 3.14/180.0))) * 5400, dy: sin((self.zRotation) + (90.0 * 3.14/180.0)) * 5400), duration: 3)
             
             let removeBulletAction = SKAction.removeFromParent()
-            bullet.runAction(SKAction.sequence([moveActionVector, removeBulletAction]))
-            let waitToEnableFire = SKAction.waitForDuration(0.5)
-            runAction(waitToEnableFire, completion: {
+            bullet.run(SKAction.sequence([moveActionVector, removeBulletAction]))
+            let waitToEnableFire = SKAction.wait(forDuration: 0.5)
+            run(waitToEnableFire, completion: {
                 self.canFire = true
             })
         }
